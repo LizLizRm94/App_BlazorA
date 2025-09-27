@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppBlazor.Entities", "AppBl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppBlazor.Test", "AppBlazor.Test\AppBlazor.Test.csproj", "{835A5499-00ED-4318-8ABE-CD14108E295A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppLissy", "BlazorAppLissy\BlazorAppLissy.csproj", "{437CD5D8-0D94-4F6B-B308-5AB28988F786}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{835A5499-00ED-4318-8ABE-CD14108E295A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{835A5499-00ED-4318-8ABE-CD14108E295A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{835A5499-00ED-4318-8ABE-CD14108E295A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{437CD5D8-0D94-4F6B-B308-5AB28988F786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{437CD5D8-0D94-4F6B-B308-5AB28988F786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{437CD5D8-0D94-4F6B-B308-5AB28988F786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{437CD5D8-0D94-4F6B-B308-5AB28988F786}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

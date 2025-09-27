@@ -1,0 +1,6 @@
+﻿@page "/formlibro/edit/{idlibro}"
+<FormLibro idlibro="int.Parse(idlibro)"/>
+@code {
+    [Parameter]
+    public string idlibro { set; get; } = null!;
+}
