@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppBlazor.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorAppLissy.Controllers
 {
@@ -35,6 +36,30 @@ namespace BlazorAppLissy.Controllers
 
         [HttpDelete("{idlibro}")]
         public IActionResult eliminarlibro(int idlibro)
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        public IActionResult guardarLibro([FromBody]LibroFormCLS libroFormCLS)
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost("recuperarArchivo/{idlibro}")]
+        public IActionResult recuperarArchivo(int idlibro)
         {
             try
             {
