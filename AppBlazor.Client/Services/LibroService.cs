@@ -13,8 +13,8 @@ namespace AppBlazor.Client.Services
             }
         }
         private List<LibroListCLS> lista;
-        private TipoLibroService tipoLibroService;
-        public LibroService(TipoLibroService _tipoLibroService)
+        private TipoLibroServices tipoLibroService;
+        public LibroService(TipoLibroServices _tipoLibroService)
         {
             tipoLibroService = _tipoLibroService;
             lista = new List<LibroListCLS>();

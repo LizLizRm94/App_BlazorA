@@ -1,21 +1,18 @@
-﻿namespace AppBlazor.Client.Services
+﻿using AppBlazor.Entities;
+using System.Runtime.CompilerServices;
+
+namespace AppBlazor.Client.Services
 {
-    public class TipoLibroCLS
-    {
-        public int idtipolibro { get; set; }
-        public string nombretipolibro { get; set; }
-    }
-    public class TipoLibroService
+    public class TipoLibroServices
     {
         private List<TipoLibroCLS> lista;
-        public TipoLibroService()
+        public TipoLibroServices()
         {
             lista = new List<TipoLibroCLS>();
             lista.Add(new TipoLibroCLS() { idtipolibro = 1, nombretipolibro = "Cuento" });
             lista.Add(new TipoLibroCLS() { idtipolibro = 2, nombretipolibro = "Novela" });
         }
-
-        public List<TipoLibroCLS> listarTipoLibros()
+        public List<TipoLibroCLS> listartipolibros()
         {
             return lista;
         }
@@ -43,9 +40,5 @@
                 return obj.nombretipolibro;
             }
         }
-
-
     }
-
 }
-                                                                    
