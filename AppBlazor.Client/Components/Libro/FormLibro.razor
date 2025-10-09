@@ -1,6 +1,6 @@
 ﻿@inject NavigationManager navigatorManager
 @inject LibroService libroService
-@inject TipoLibroService tipoLibroService
+@inject TipoLibroServices tipoLibroService
 @inject IJSRuntime JS
 
 <h2>@titulo</h2>
@@ -58,12 +58,14 @@
 @code {
     private async Task descargar(int idlibro, string nombrearchivo)
     {
-        string archivo = libroService.recuperaArchivoPorId(idlibro);
+        string archivo = await libroService.recuperaArchivoPorId(idlibro);
         if (archivo != null && archivo.Length > 0)
         {
             await JS.InvokeVoidAsync("descargarArchivo", archivo, nombrearchivo);
         }
+
     }
+
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
@@ -105,9 +107,9 @@
     public string titulo { get; set; } = "";
     public List<TipoLibroCLS> listatipo { get; set; } = new List<TipoLibroCLS>();
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        listatipo = tipoLibroService.listarTipoLibros();
+        listatipo = await tipoLibroService.listartipolibros();
 
         if (idlibro == 0)
         {
@@ -115,14 +117,13 @@
         }
         else
         {
-            oLibroFormCLS = libroService.recuperaLibroPorId(idlibro);
+            oLibroFormCLS = await libroService.recuperaLibroPorId(idlibro);
             titulo = "Editar Libro: " + oLibroFormCLS.titulo;
             if(oLibroFormCLS.image != null)
             {
                 imagePreview = "data:image/png;base64," + Convert.ToBase64String(oLibroFormCLS.image);
             }
         }
-        return base.OnInitializedAsync();
     }
 
     private void guardar()

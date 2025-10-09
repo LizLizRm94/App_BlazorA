@@ -49,7 +49,6 @@
         </tbody>
     </table>
 
-
 }
 
 @code
@@ -57,7 +56,7 @@
     public List<LibroListCLS> lista { get; set; } = new List<LibroListCLS>();
     private async Task descargar(int idlibro, string nombrearchivo)
     {
-        string archivo = libroService.recuperaArchivoPorId(idlibro);
+        string archivo = await libroService.recuperaArchivoPorId(idlibro);
         if (archivo != null && archivo.Length > 0)
         {
             await JS.InvokeVoidAsync("descargarArchivo", archivo, nombrearchivo);
@@ -81,33 +80,26 @@
         navigationManager.NavigateTo("/formlibro/edit/" + idLibro);
 
     }
-    public void eliminarLibro(int idLibro)
-
+    public async Task eliminarLibro(int idLibro)
     {
-
         libroService.eliminarLibro(idLibro);
-
-        listarLibros();
+        await listarLibros();
 
     }
-    private Task filtrar(string titulo)
+    private async Task filtrar(string titulo)
     {
-        lista = libroService.filtrarLibros(titulo);
+        lista = await libroService.filtrarLibros(titulo);
         StateHasChanged();
-        return Task.CompletedTask;
     }
-    private void listarLibros()
-
+    private async Task listarLibros()
     {
-
-        lista = libroService.listarLibros();
+        lista = await libroService.listarLibros();
 
     }
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         libroService.OnSearch += filtrar;
 
-        listarLibros();
-        return base.OnInitializedAsync();
+        await listarLibros();
     }
 }

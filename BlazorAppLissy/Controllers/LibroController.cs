@@ -13,7 +13,7 @@ namespace BlazorAppLissy.Controllers
         {
             this.bd = _bd;
         }
-        
+
         [HttpGet]
         public IActionResult listarLibros()
         {
@@ -74,7 +74,17 @@ namespace BlazorAppLissy.Controllers
         {
             try
             {
-                return Ok();
+                var obj = bd.Libros.Where(p => p.Iidlibro == idlibro).FirstOrDefault();
+                if (obj == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    obj.Bhabilitado = 0;
+                    bd.SaveChanges();
+                    return Ok("Se elimino correctamente");
+                }
             }
             catch (Exception ex)
             {
@@ -82,7 +92,7 @@ namespace BlazorAppLissy.Controllers
             }
         }
         [HttpPost]
-        public IActionResult guardarLibro([FromBody]LibroFormCLS libroFormCLS)
+        public IActionResult guardarLibro([FromBody] LibroFormCLS libroFormCLS)
         {
             try
             {
@@ -97,22 +107,38 @@ namespace BlazorAppLissy.Controllers
         public IActionResult recuperarArchivoPorId(int idlibro)
         {
             try
-            {
-                var obj = bd.Libros.Where(p => p.Iidlibro == idlibro).FirstOrDefault();
-                if(obj == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return Ok(obj.Libropdf);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-    }
 
+            {
+
+                var obj = bd.Libros.Where(p => p.Iidlibro == idlibro).FirstOrDefault();
+
+                if (obj == null)
+
+                {
+
+                    return NotFound();
+
+                }
+
+                else
+
+                {
+
+                    return Ok(obj.Libropdf);
+
+                }
+
+            }
+
+            catch (Exception ex)
+
+            {
+
+                return StatusCode(500, ex.Message);
+
+            }
+
+        }
+
+    }
 }

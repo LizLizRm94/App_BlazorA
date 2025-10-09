@@ -1,4 +1,6 @@
 ﻿using AppBlazor.Entities;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace AppBlazor.Client.Services
 {
@@ -14,30 +16,48 @@ namespace AppBlazor.Client.Services
         }
         private List<LibroListCLS> lista;
         private TipoLibroServices tipoLibroService;
-        public LibroService(TipoLibroServices _tipoLibroService)
+
+        private readonly HttpClient http;
+        public LibroService(TipoLibroServices _tipoLibroService, HttpClient _http)
         {
+            http = _http;
             tipoLibroService = _tipoLibroService;
             lista = new List<LibroListCLS>();
-            lista.Add(new LibroListCLS { idlibro = 1, titulo = "Caperucita Roja", nombretipolibro = "Cuento" });
-            lista.Add(new LibroListCLS { idlibro = 2, titulo = "Don Quijote de la Mancha", nombretipolibro = "Novela" });
+            //lista.Add(new LibroListCLS { idlibro = 1, titulo = "Caperucita Roja", nombretipolibro = "Cuento" });
+            //lista.Add(new LibroListCLS { idlibro = 2, titulo = "Don Quijote de la Mancha", nombretipolibro = "Novela" });
         }
 
-        public List<LibroListCLS> listarLibros()
+        public async Task<List<LibroListCLS>> listarLibros()
         {
-            return lista;
+           try
+            {
+                var response = await http.GetFromJsonAsync<List<LibroListCLS>>("api/Libro");
+                if (response == null)
+                {
+                    return new List<LibroListCLS>();
+                }
+                else
+                {
+                    return response;
+                }
+            }
+            catch
+            {
+                return new List<LibroListCLS>();
+            }
         }
 
-        public List<LibroListCLS> filtrarLibros(string nombretitulo)
+        public async Task<List<LibroListCLS>> filtrarLibros(string nombretitulo)
         {
-             List<LibroListCLS> l = listarLibros();
+            List<LibroListCLS> l = await listarLibros();
             if (nombretitulo == "")
             {
                 return l;
             }
             else
             {
-                List<LibroListCLS> listarfiltrada = l.Where(p => p.titulo.ToUpper().Contains(nombretitulo.ToUpper())).ToList();
-                return listarfiltrada;
+                List<LibroListCLS> listafiltrada = l.Where(p => p.titulo.ToUpper().Contains(nombretitulo.ToUpper())).ToList();
+                return listafiltrada;
             }
         }
         public void eliminarLibro(int idlibro)
@@ -46,7 +66,7 @@ namespace AppBlazor.Client.Services
             lista = listaQueda;
         }
 
-        public LibroFormCLS recuperaLibroPorId(int idlibro)
+        public async Task <LibroFormCLS>  recuperaLibroPorId(int idlibro)
         {
             var obj = lista.Where(p => p.idlibro == idlibro).FirstOrDefault();
             if (obj != null)
@@ -67,14 +87,21 @@ namespace AppBlazor.Client.Services
                 return new LibroFormCLS();
             }
         }
-        public string recuperaArchivoPorId(int idlibro)
+        public async Task<string> recuperaArchivoPorId(int idlibro)
         {
-            var obj = lista.Where(p => p.idlibro == idlibro).FirstOrDefault();
-            if (obj != null && obj.archivo != null)
+            try
             {
-                return Convert.ToBase64String(obj.archivo);
+                var response = await http.GetFromJsonAsync<byte[]>("api/Libro/recuperarArchivo/" + idlibro);
+                if (response == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return Convert.ToBase64String(response);
+                }
             }
-            else
+            catch
             {
                 return "";
             }

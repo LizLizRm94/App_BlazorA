@@ -1,20 +1,39 @@
 ﻿using AppBlazor.Entities;
+using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace AppBlazor.Client.Services
 {
     public class TipoLibroServices
     {
+        private readonly HttpClient http;
         private List<TipoLibroCLS> lista;
-        public TipoLibroServices()
+        public TipoLibroServices(HttpClient _http)
         {
+            http = _http;
             lista = new List<TipoLibroCLS>();
-            lista.Add(new TipoLibroCLS() { idtipolibro = 1, nombretipolibro = "Cuento" });
-            lista.Add(new TipoLibroCLS() { idtipolibro = 2, nombretipolibro = "Novela" });
+            //lista.Add(new TipoLibroCLS() { idtipolibro = 1, nombretipolibro = "Cuento" });
+            //lista.Add(new TipoLibroCLS() { idtipolibro = 2, nombretipolibro = "Novela" });
         }
-        public List<TipoLibroCLS> listartipolibros()
+        public async Task<List<TipoLibroCLS>> listartipolibros()
         {
-            return lista;
+            try 
+            {
+                var response = await http.GetFromJsonAsync<List<TipoLibroCLS>>("api/TipoLibro");
+                if (response == null)
+                {
+                    return new List<TipoLibroCLS>();
+                }
+                else
+                {
+                    return response;
+                }
+            }
+            catch
+            {
+                return new List<TipoLibroCLS>();
+            }
         }
         public int obtenerIdTipoLibro(string nombretipolibro)
         {
