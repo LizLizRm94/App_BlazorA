@@ -82,7 +82,7 @@
     }
     public async Task eliminarLibro(int idLibro)
     {
-        libroService.eliminarLibro(idLibro);
+        await libroService.eliminarLibro(idLibro);
         await listarLibros();
 
     }

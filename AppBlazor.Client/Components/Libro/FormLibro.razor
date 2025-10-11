@@ -2,6 +2,7 @@
 @inject LibroService libroService
 @inject TipoLibroServices tipoLibroService
 @inject IJSRuntime JS
+@inject AutorService autorService
 
 <h2>@titulo</h2>
 <EditForm Model="@oLibroFormCLS" OnValidSubmit="@guardar">
@@ -29,6 +30,19 @@
         </InputSelect>
         <ValidationMessage For="(()=>oLibroFormCLS.idtipolibro)" />
     </div>
+
+    <div class="mt-3">
+        <label>Seleccione Autor</label>
+        <InputSelect class="form-control" @bind-Value="oLibroFormCLS.idautor">
+            <option value="0">--Seleccione--</option>
+            @foreach (var item in listaautor)
+            {
+                <option value="@item.idautor">@item.nombreautor</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="(() => oLibroFormCLS.idautor)" />
+    </div>
+
     <div class="mt-3">
         <label>Resumen</label>
         <InputTextArea class="form-control" @bind-Value="oLibroFormCLS.resumen" />
@@ -65,7 +79,6 @@
         }
 
     }
-
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
@@ -106,10 +119,12 @@
     public int idlibro { get; set; }
     public string titulo { get; set; } = "";
     public List<TipoLibroCLS> listatipo { get; set; } = new List<TipoLibroCLS>();
+    public List<AutorCLS> listaautor { get; set; } = new List<AutorCLS>();
 
     protected override async Task OnInitializedAsync()
     {
         listatipo = await tipoLibroService.listartipolibros();
+        listaautor = await autorService.listarAutores();
 
         if (idlibro == 0)
         {

@@ -60,29 +60,30 @@ namespace AppBlazor.Client.Services
                 return listafiltrada;
             }
         }
-        public void eliminarLibro(int idlibro)
+        public async Task <string> eliminarLibro(int idlibro)
         {
-            var listaQueda = lista.Where(p => p.idlibro != idlibro).ToList();
-            lista = listaQueda;
-        }
-
-        public async Task <LibroFormCLS>  recuperaLibroPorId(int idlibro)
-        {
-            var obj = lista.Where(p => p.idlibro == idlibro).FirstOrDefault();
-            if (obj != null)
+            var response = await http.DeleteAsync("api/Libro/" + idlibro);
+            if (response.IsSuccessStatusCode)
             {
-                return new LibroFormCLS
-                {
-                    idLibro = obj.idlibro,
-                    titulo = obj.titulo,
-                    resumen = "Resumen",
-                    idtipolibro = tipoLibroService.obtenerIdTipoLibro(obj.nombretipolibro),
-                    image = obj.imagen, nombrearchivo = obj.nombrearchivo
-
-                    
-                };
+                return await response.Content.ReadAsStringAsync();
             }
             else
+            {
+                return "Error: " + await response.Content.ReadAsStringAsync();
+            }
+        }
+
+        public async Task<LibroFormCLS> recuperaLibroPorId(int idlibro)
+        {
+            try
+            {
+                var response = await http.GetFromJsonAsync<LibroFormCLS>($"api/Libro/{idlibro}");
+                if (response != null)
+                    return response;
+                else
+                    return new LibroFormCLS();
+            }
+            catch
             {
                 return new LibroFormCLS();
             }

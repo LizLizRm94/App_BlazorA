@@ -59,6 +59,7 @@ namespace BlazorAppLissy.Controllers
                     oLibroFormCLS.nombrearchivo = obj.Nombrearchivo!;
                     oLibroFormCLS.archivo = obj.Libropdf;
                     oLibroFormCLS.image = obj.Fotocaratula;
+                    oLibroFormCLS.idautor = (int)obj.Iidautor!;
                     return Ok(oLibroFormCLS);
                 }
             }
