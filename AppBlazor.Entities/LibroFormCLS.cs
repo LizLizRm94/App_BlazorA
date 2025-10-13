@@ -17,7 +17,11 @@ namespace AppBlazor.Entities
         public int idtipolibro { get; set; }
         public byte[]? image { get; set; }
         public byte[]? archivo { get; set; }
-        public string nombrearchivo { get; set; } = string.Empty;
+        public string nombrearchivo { get; set; } = null!;
+        [Range(1, int.MaxValue, ErrorMessage ="Debe ingresar un numero de paginas mayor a 0 y menor o igual a 5000")]
         public int idautor { get; set; }
+        public int numeropaginas {  get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Debe ingresar un stock mayor a 0")]
+        public int stock {  get; set; }
     }
 }

@@ -108,34 +108,23 @@ namespace AppBlazor.Client.Services
             }
         }
 
-        public void guardarLibro(LibroFormCLS oLibroFormCLS)
+        public async Task <string> guardarLibro(LibroFormCLS oLibroFormCLS)
         {
-            if (oLibroFormCLS.idLibro == 0)
+            try
             {
-                int idlibro = lista.Select(p => p.idlibro).Max() + 1;
-                lista.Add(new LibroListCLS
+                var response = await http.PostAsJsonAsync("api/Libro", oLibroFormCLS);
+                if (response.IsSuccessStatusCode)
                 {
-                    idlibro = idlibro,
-                    titulo = oLibroFormCLS.titulo,
-                    nombretipolibro = tipoLibroService.obtenerNombreTipoLibro(oLibroFormCLS.idtipolibro),
-                    imagen = oLibroFormCLS.image,
-
-                    archivo = oLibroFormCLS.archivo,
-                    nombrearchivo=oLibroFormCLS.nombrearchivo
-                });
-            }
-            else
-            {
-                var obj = lista.Where(p => p.idlibro == oLibroFormCLS.idLibro).FirstOrDefault();
-                if (obj != null)
-                {
-                    obj.titulo = oLibroFormCLS.titulo;
-                    obj.nombretipolibro = tipoLibroService.obtenerNombreTipoLibro(oLibroFormCLS.idtipolibro);
-                    obj.imagen = oLibroFormCLS.image;
-
-                    obj.archivo = oLibroFormCLS.archivo;
-                    obj.nombrearchivo=oLibroFormCLS.nombrearchivo;
+                    return await response.Content.ReadAsStringAsync();
                 }
+                else
+                {
+                    return "Error: " + await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch(Exception ex)
+            {
+                return "Error: " + ex.Message;
             }
         }
     }
