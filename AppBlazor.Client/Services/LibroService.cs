@@ -1,4 +1,5 @@
 ﻿using AppBlazor.Entities;
+using Microsoft.JSInterop;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -18,9 +19,11 @@ namespace AppBlazor.Client.Services
         private TipoLibroServices tipoLibroService;
 
         private readonly HttpClient http;
-        public LibroService(TipoLibroServices _tipoLibroService, HttpClient _http)
+        private readonly IJSRuntime jsRuntime;
+        public LibroService(TipoLibroServices _tipoLibroService, HttpClient _http, IJSRuntime _jsRuntime)
         {
             http = _http;
+            jsRuntime = _jsRuntime;
             tipoLibroService = _tipoLibroService;
             lista = new List<LibroListCLS>();
             //lista.Add(new LibroListCLS { idlibro = 1, titulo = "Caperucita Roja", nombretipolibro = "Cuento" });
@@ -47,6 +50,7 @@ namespace AppBlazor.Client.Services
             }
         }
 
+
         public async Task<List<LibroListCLS>> filtrarLibros(string nombretitulo)
         {
             List<LibroListCLS> l = await listarLibros();
@@ -60,10 +64,17 @@ namespace AppBlazor.Client.Services
                 return listafiltrada;
             }
         }
-        public void eliminarLibro(int idlibro)
+        public async Task <string> eliminarLibro(int idlibro)
         {
-            var listaQueda = lista.Where(p => p.idlibro != idlibro).ToList();
-            lista = listaQueda;
+            var response = await http.DeleteAsync("api/Libro/" + idlibro);
+            if(response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return "Error:" + await response.Content.ReadAsStringAsync();
+            }
         }
 
         public async Task <LibroFormCLS>  recuperaLibroPorId(int idlibro)
@@ -135,6 +146,14 @@ namespace AppBlazor.Client.Services
                     obj.archivo = oLibroFormCLS.archivo;
                     obj.nombrearchivo=oLibroFormCLS.nombrearchivo;
                 }
+            }
+        }
+        public async Task descargar(int idlibro, string nombrearchivo)
+        {
+            string archivo = await recuperaArchivoPorId(idlibro);
+            if (archivo != null && archivo.Length > 0)
+            {
+                await jsRuntime.InvokeVoidAsync("descargarArchivo", archivo, nombrearchivo);
             }
         }
     }

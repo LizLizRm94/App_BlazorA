@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BlazorAppLissy.Models;
 
-public partial class Autor
+public class Autor
 {
     public int Iidautor { get; set; }
 

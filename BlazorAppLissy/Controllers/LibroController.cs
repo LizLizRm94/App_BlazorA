@@ -22,6 +22,8 @@ namespace BlazorAppLissy.Controllers
                 var lista = (from libro in bd.Libros
                              join tipolibro in bd.TipoLibros
                              on libro.Iidtipolibro equals tipolibro.Iidtipolibro
+                             join autor in bd.Autors
+                             on libro.Iidautor equals autor.Iidautor
                              where libro.Bhabilitado == 1
                              select new LibroListCLS
                              {
@@ -59,6 +61,7 @@ namespace BlazorAppLissy.Controllers
                     oLibroFormCLS.nombrearchivo = obj.Nombrearchivo!;
                     oLibroFormCLS.archivo = obj.Libropdf;
                     oLibroFormCLS.image = obj.Fotocaratula;
+                    oLibroFormCLS.idautor= (int)obj.Iidautor;
                     return Ok(oLibroFormCLS);
                 }
             }

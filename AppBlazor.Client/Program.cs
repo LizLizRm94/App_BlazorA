@@ -18,6 +18,8 @@ namespace AppBlazor.Client
             builder.Services.AddScoped<LibroService>();
 
             builder.Services.AddScoped<TipoLibroServices>();
+            builder.Services.AddScoped<AutorService>();
+            builder.Services.AddScoped<UtilService>();
 
             await builder.Build().RunAsync();
         }
