@@ -77,23 +77,17 @@ namespace AppBlazor.Client.Services
             }
         }
 
-        public async Task <LibroFormCLS>  recuperaLibroPorId(int idlibro)
+        public async Task<LibroFormCLS> recuperaLibroPorId(int idlibro)
         {
-            var obj = lista.Where(p => p.idlibro == idlibro).FirstOrDefault();
-            if (obj != null)
+            try
             {
-                return new LibroFormCLS
-                {
-                    idLibro = obj.idlibro,
-                    titulo = obj.titulo,
-                    resumen = "Resumen",
-                    idtipolibro = tipoLibroService.obtenerIdTipoLibro(obj.nombretipolibro),
-                    image = obj.imagen, nombrearchivo = obj.nombrearchivo
-
-                    
-                };
+                var response = await http.GetFromJsonAsync<LibroFormCLS>($"api/Libro/{idlibro}");
+                if (response != null)
+                    return response;
+                else
+                    return new LibroFormCLS();
             }
-            else
+            catch
             {
                 return new LibroFormCLS();
             }
@@ -118,12 +112,12 @@ namespace AppBlazor.Client.Services
             }
         }
 
-        public void guardarLibro(LibroFormCLS oLibroFormCLS)
+        public async Task <string> guardarLibro(LibroFormCLS oLibroFormCLS)
         {
-            if (oLibroFormCLS.idLibro == 0)
+            try
             {
-                int idlibro = lista.Select(p => p.idlibro).Max() + 1;
-                lista.Add(new LibroListCLS
+                var response = await http.PostAsJsonAsync("api/Libro", oLibroFormCLS);
+                if (response.IsSuccessStatusCode)
                 {
                     idlibro = idlibro,
                     titulo = oLibroFormCLS.titulo,

@@ -21,6 +21,8 @@ namespace AppBlazor.Client
             builder.Services.AddScoped<AutorService>();
             builder.Services.AddScoped<UtilService>();
 
+            builder.Services.AddScoped<AutorService>();
+
             await builder.Build().RunAsync();
         }
     }
